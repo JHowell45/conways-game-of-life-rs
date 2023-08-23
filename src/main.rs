@@ -1,3 +1,17 @@
+pub mod board;
+
+use board::Board;
+
 fn main() {
-    println!("Hello, world!");
+    let mut board = Board::new(10);
+    board.display();
+
+    board.flip(0, 0);
+    board.display();
+
+    board.flip(0, 0);
+    board.display();
+
+    board.flip(1, 1);
+    board.display();
 }
