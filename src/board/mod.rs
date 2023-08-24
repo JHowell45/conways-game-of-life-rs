@@ -1,4 +1,6 @@
 use core::slice::Iter;
+use rand::{Rng, SeedableRng};
+use rand::rngs::SmallRng;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Board(Vec<Vec<bool>>);
@@ -6,6 +8,11 @@ pub struct Board(Vec<Vec<bool>>);
 impl Board {
     pub fn new(size: usize) -> Self {
         Self(vec![vec![false; size]; size])
+    }
+
+    pub fn randomise(size: usize) -> Self {
+        let mut rng = SmallRng::from_entropy();
+        Self((0..size).map(|_| (0..size).map(|_| rng.gen::<bool>()).collect()).collect())
     }
 
     pub fn rows(&self) -> Iter<Vec<bool>> {
