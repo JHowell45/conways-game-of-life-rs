@@ -263,18 +263,30 @@ mod tests {
         CellState::Dead,
         CellState::Dead,
         CellState::Dead,
-    ], None, 3, 3, 3)]
-    fn test_get_start_index_neighbours(
+    ], None, 3, 3, 0, 3 ; "3x3 grid with 3 neighbours")]
+    #[test_case(vec![
+        CellState::Dead,
+        CellState::Alive,
+        CellState::Dead,
+        CellState::Alive,
+        CellState::Dead,
+        CellState::Dead,
+        CellState::Dead,
+        CellState::Dead,
+        CellState::Dead,
+    ], None, 3, 3, 0, 2 ; "3x3 grid with 2 neighbours")]
+    fn test_get_neighbours(
         data: Vec<CellState>,
         rows: Option<usize>,
         x_size: usize,
         y_size: usize,
+        index: usize,
         neighbours: usize,
     ) {
         let board = Board::from_vec(data, rows);
         println!("{}", board);
         assert_eq!(x_size, board.x_size);
         assert_eq!(y_size, board.y_size);
-        assert_eq!(neighbours, board.get_neighbours(0));
+        assert_eq!(neighbours, board.get_neighbours(index));
     }
 }
