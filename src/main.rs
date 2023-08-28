@@ -3,15 +3,10 @@ pub mod board;
 use board::Board;
 
 fn main() {
-    let mut board = Board::randomise(10);
-    board.display();
-
-    board.flip(0, 0);
-    board.display();
-
-    board.flip(0, 0);
-    board.display();
-
-    board.flip(1, 1);
-    board.display();
+    let mut board = Board::randomise(4, 3);
+    println!("{}", board);
+    // board.step();
+    for v in [0,1,3,5,6,10] {
+        println!("{}", board.get_neighbours(v));
+    }
 }
