@@ -1,13 +1,13 @@
-use std::fmt;
 use rand::{
     distributions::{Distribution, Standard},
-    Rng
+    Rng,
 };
+use std::fmt;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum CellState {
     Alive,
-    Dead
+    Dead,
 }
 
 impl fmt::Display for CellState {
@@ -23,7 +23,7 @@ impl Distribution<CellState> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> CellState {
         match rng.gen_range(0..=1) {
             0 => CellState::Dead,
-            _ => CellState::Alive
+            _ => CellState::Alive,
         }
     }
 }
@@ -41,7 +41,7 @@ impl fmt::Debug for CellState {
 pub struct Board {
     data: Vec<CellState>,
     pub x_size: usize,
-    pub y_size: usize
+    pub y_size: usize,
 }
 
 impl fmt::Display for Board {
@@ -62,7 +62,7 @@ impl Board {
         Self {
             data: vec![CellState::Dead; x * y],
             x_size: x,
-            y_size: y
+            y_size: y,
         }
     }
 
@@ -74,12 +74,32 @@ impl Board {
         Self {
             data: (0..(x * y)).map(|_| rand::random::<CellState>()).collect(),
             x_size: x,
-            y_size: y
+            y_size: y,
         }
     }
 
     pub fn randomise_square(x: usize) -> Self {
         Self::randomise(x, x)
+    }
+
+    pub fn from_vec(data: Vec<CellState>, rows: Option<usize>) -> Self {
+        let rows = match rows {
+            Some(rows) => rows,
+            None => (data.len() as f32).sqrt() as usize,
+        };
+        let cols = data.len() / rows;
+        if data.len() % rows != 0 {
+            panic!(
+                "Invalid rows for data length of {} for row size of {}",
+                data.len(),
+                rows
+            );
+        }
+        Self {
+            data,
+            x_size: cols,
+            y_size: rows,
+        }
     }
 
     pub fn size(&self) -> usize {
@@ -136,7 +156,7 @@ impl Board {
                 if self.data[index - self.x_size] == CellState::Alive {
                     neighbours += 1;
                 }
-                if self.data[index - self.x_size-1] == CellState::Alive {
+                if self.data[index - self.x_size - 1] == CellState::Alive {
                     neighbours += 1;
                 }
             }
@@ -144,12 +164,11 @@ impl Board {
                 if self.data[index + self.x_size] == CellState::Alive {
                     neighbours += 1;
                 }
-                if self.data[index + self.x_size + 1] == CellState::Alive {
+                if self.data[index + self.x_size - 1] == CellState::Alive {
                     neighbours += 1;
                 }
             }
         } else {
-
         }
         neighbours
     }
@@ -164,10 +183,98 @@ impl Board {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use test_case::test_case;
 
     #[test]
     fn test_create_board() {
         let board = Board::new(3, 3);
         assert_eq!(9, board.size());
+    }
+
+    #[test]
+    fn test_from_vec_no_rows() {
+        let board = Board::from_vec(
+            vec![
+                CellState::Dead,
+                CellState::Dead,
+                CellState::Alive,
+                CellState::Dead,
+            ],
+            None,
+        );
+        assert_eq!(2, board.x_size);
+        assert_eq!(2, board.y_size);
+    }
+
+    #[test]
+    fn test_from_vec_with_rows() {
+        let board = Board::from_vec(
+            vec![
+                CellState::Dead,
+                CellState::Dead,
+                CellState::Alive,
+                CellState::Dead,
+                CellState::Dead,
+                CellState::Dead,
+            ],
+            Some(3),
+        );
+        assert_eq!(2, board.x_size);
+        assert_eq!(3, board.y_size);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_from_vec_no_rows_invalid_data_size() {
+        Board::from_vec(
+            vec![
+                CellState::Dead,
+                CellState::Dead,
+                CellState::Alive,
+                CellState::Dead,
+                CellState::Dead,
+            ],
+            None,
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_from_vec_with_rows_invalid_data_size() {
+        Board::from_vec(
+            vec![
+                CellState::Dead,
+                CellState::Dead,
+                CellState::Alive,
+                CellState::Dead,
+                CellState::Dead,
+            ],
+            Some(2),
+        );
+    }
+
+    #[test_case(vec![
+        CellState::Dead,
+        CellState::Alive,
+        CellState::Dead,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Dead,
+        CellState::Dead,
+        CellState::Dead,
+        CellState::Dead,
+    ], None, 3, 3, 3)]
+    fn test_get_start_index_neighbours(
+        data: Vec<CellState>,
+        rows: Option<usize>,
+        x_size: usize,
+        y_size: usize,
+        neighbours: usize,
+    ) {
+        let board = Board::from_vec(data, rows);
+        println!("{}", board);
+        assert_eq!(x_size, board.x_size);
+        assert_eq!(y_size, board.y_size);
+        assert_eq!(neighbours, board.get_neighbours(0));
     }
 }
