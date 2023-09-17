@@ -190,131 +190,45 @@ mod tests {
     }
 
     #[test]
-    fn test_from_vec_no_rows() {
-        let board = Board::from_vec(
-            vec![
-                CellState::Dead,
-                CellState::Dead,
-                CellState::Alive,
-                CellState::Dead,
-            ],
-            None,
-        );
+    fn test_from_u8_vec_no_rows() {
+        let board = Board::from_u8_vec(vec![0, 0, 1, 0], None);
         assert_eq!(2, board.x_size);
         assert_eq!(2, board.y_size);
     }
 
     #[test]
-    fn test_from_vec_with_rows() {
-        let board = Board::from_vec(
-            vec![
-                CellState::Dead,
-                CellState::Dead,
-                CellState::Alive,
-                CellState::Dead,
-                CellState::Dead,
-                CellState::Dead,
-            ],
-            Some(3),
-        );
+    fn test_from_u8_vec_with_rows() {
+        let board = Board::from_u8_vec(vec![0, 0, 1, 0, 0, 0], Some(3));
         assert_eq!(2, board.x_size);
         assert_eq!(3, board.y_size);
     }
 
     #[test]
     #[should_panic]
-    fn test_from_vec_no_rows_invalid_data_size() {
-        Board::from_vec(
-            vec![
-                CellState::Dead,
-                CellState::Dead,
-                CellState::Alive,
-                CellState::Dead,
-                CellState::Dead,
-            ],
-            None,
-        );
+    fn test_from_u8_vec_no_rows_invalid_data_size() {
+        Board::from_u8_vec(vec![0, 0, 1, 0, 0], None);
     }
 
     #[test]
     #[should_panic]
-    fn test_from_vec_with_rows_invalid_data_size() {
-        Board::from_vec(
-            vec![
-                CellState::Dead,
-                CellState::Dead,
-                CellState::Alive,
-                CellState::Dead,
-                CellState::Dead,
-            ],
-            Some(2),
-        );
+    fn test_from_u8_vec_with_rows_invalid_data_size() {
+        Board::from_u8_vec(vec![0, 0, 1, 0, 0], Some(2));
     }
 
-    #[test_case(vec![
-        CellState::Dead,
-        CellState::Alive,
-        CellState::Dead,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Dead,
-        CellState::Dead,
-        CellState::Dead,
-        CellState::Dead,
-    ], None, 3, 3, 0, 3 ; "3x3 grid with 3 neighbours for index 0")]
-    #[test_case(vec![
-        CellState::Dead,
-        CellState::Alive,
-        CellState::Dead,
-        CellState::Alive,
-        CellState::Dead,
-        CellState::Dead,
-        CellState::Dead,
-        CellState::Dead,
-        CellState::Dead,
-    ], None, 3, 3, 0, 2 ; "3x3 grid with 2 neighbours for index 0")]
-    #[test_case(vec![
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Dead,
-        CellState::Dead,
-        CellState::Dead,
-        CellState::Dead,
-        CellState::Dead,
-    ], None, 3, 3, 1, 3 ; "3x3 grid with 2 neighbours for index 1")]
-    #[test_case(vec![
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Dead,
-        CellState::Alive,
-        CellState::Dead,
-    ], None, 3, 3, 8, 3 ; "3x3 grid with 2 neighbours for index 8")]
-    #[test_case(vec![
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Alive,
-        CellState::Dead,
-        CellState::Alive,
-        CellState::Dead,
-    ], None, 3, 3, 4, 4 ; "3x3 grid with 2 neighbours for index 4")]
+    #[test_case(vec![0,1,0,1,1,0,0,0,0], None, 3, 3, 0, 3 ; "3x3 grid with 3 neighbours for index 0")]
+    #[test_case(vec![0,1,0,1,0,0,0,0,0], None, 3, 3, 0, 2 ; "3x3 grid with 2 neighbours for index 0")]
+    #[test_case(vec![1,1,1,1,0,0,0,0,0], None, 3, 3, 1, 3 ; "3x3 grid with 3 neighbours for index 1")]
+    #[test_case(vec![1,1,1,1,1,1,0,1,0], None, 3, 3, 8, 3 ; "3x3 grid with 3 neighbours for index 8")]
+    #[test_case(vec![1,1,1,1,1,1,0,1,0], None, 3, 3, 4, 6 ; "3x3 grid with 6 neighbours for index 4")]
     fn test_get_neighbours(
-        data: Vec<CellState>,
+        data: Vec<u8>,
         rows: Option<usize>,
         x_size: usize,
         y_size: usize,
         index: usize,
         neighbours: usize,
     ) {
-        let board = Board::from_vec(data, rows);
+        let board = Board::from_u8_vec(data, rows);
         println!("{}", board);
         assert_eq!(x_size, board.x_size);
         assert_eq!(y_size, board.y_size);
