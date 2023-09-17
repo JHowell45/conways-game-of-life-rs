@@ -1,5 +1,3 @@
-use std::convert::Into;
-
 use rand::{
     distributions::{Distribution, Standard},
     Rng,
@@ -35,15 +33,6 @@ impl Distribution<CellState> for Standard {
         match rng.gen_range(0..=1) {
             0 => CellState::Dead,
             _ => CellState::Alive,
-        }
-    }
-}
-
-impl Into<usize> for CellState {
-    fn into(self) -> usize {
-        return match self {
-            Self::Alive => 1,
-            Self::Dead => 0,
         }
     }
 }
