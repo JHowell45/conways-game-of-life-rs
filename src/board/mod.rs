@@ -1,3 +1,5 @@
+use std::convert::Into;
+
 use rand::{
     distributions::{Distribution, Standard},
     Rng,
@@ -37,11 +39,11 @@ impl Distribution<CellState> for Standard {
     }
 }
 
-impl fmt::Debug for CellState {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match *self {
-            Self::Alive => write!(f, "1"),
-            Self::Dead => write!(f, "0"),
+impl Into<usize> for CellState {
+    fn into(self) -> usize {
+        return match self {
+            Self::Alive => 1,
+            Self::Dead => 0,
         }
     }
 }
