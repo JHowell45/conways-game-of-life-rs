@@ -141,14 +141,6 @@ impl Board {
                 neighbours += self.data[index + self.x_size + 1] as usize;
             }
         }
-        // println!(
-        //     "x: {}, y: {} || value: {} || index: {} || neighbours: {}",
-        //     index % self.x_size,
-        //     row,
-        //     self.data[index],
-        //     index,
-        //     neighbours
-        // );
         neighbours
     }
 
