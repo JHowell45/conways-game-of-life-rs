@@ -11,4 +11,6 @@ fn main() {
     for index in 0..board.size() {
         board.get_neighbours(index);
     }
+    board.step();
+    println!("{}", board);
 }
