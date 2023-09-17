@@ -143,6 +143,26 @@ impl Board {
         }
     }
 
+    pub fn from_u8_vec(data: Vec<u8>, rows: Option<usize>) -> Self {
+        let rows = match rows {
+            Some(rows) => rows,
+            None => (data.len() as f32).sqrt() as usize,
+        };
+        let cols = data.len() / rows;
+        if data.len() % rows != 0 {
+            panic!(
+                "Invalid rows for data length of {} for row size of {}",
+                data.len(),
+                rows
+            );
+        }
+        Self {
+            data: data.into_iter().map(|x| CellState::from(x)).collect(),
+            x_size: cols,
+            y_size: rows,
+        }
+    }
+
     pub fn size(&self) -> usize {
         self.x_size * self.y_size
     }
