@@ -8,8 +8,8 @@ use std::fmt;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum CellState {
-    Alive,
     Dead,
+    Alive,
 }
 
 impl fmt::Display for CellState {
