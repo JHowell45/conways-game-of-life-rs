@@ -147,6 +147,18 @@ impl Board {
             neighbours += self.data[index + self.x_size - 1] as usize;
         } else {
             println!("OTHER || Index: {}", index);
+            neighbours += self.data[index + 1] as usize;
+            neighbours += self.data[index - 1] as usize;
+            if index > self.x_size {
+                neighbours += self.data[index - self.x_size] as usize;
+                neighbours += self.data[index - self.x_size - 1] as usize;
+                neighbours += self.data[index - self.x_size + 1] as usize;
+            }
+            if index <= (self.size() - self.x_size) {
+                neighbours += self.data[index + self.x_size] as usize;
+                neighbours += self.data[index + self.x_size - 1] as usize;
+                neighbours += self.data[index + self.x_size + 1] as usize;
+            }
         }
         println!(
             "x: {}, y: {} || value: {} || index: {} || neighbours: {}",
