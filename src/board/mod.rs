@@ -153,22 +153,25 @@ impl Board {
     }
 
     pub fn step(&mut self) {
-        for (index, val) in self.data.iter_mut().enumerate() {
+        let mut board = self.data.clone();
+        for (index, value) in self.data.iter().enumerate() {
             let neighbours = self.get_neighbours(index);
-            println!("Index: {} || Value: {} || Neighbours: {}", index, val, neighbours);
-            match val {
+            board[index] = match value {
                 CellState::Alive => {
-                    if neighbours != 2 && neighbours != 3 {
-                        *val = CellState::Dead
+                    match neighbours {
+                        2 | 3 => CellState::Alive,
+                        _ => CellState::Dead,
                     }
-                },
+                }
                 CellState::Dead => {
-                    if neighbours == 3 {
-                        *val = CellState::Alive
+                    match neighbours {
+                        3 => CellState::Alive,
+                        _ => CellState::Dead,
                     }
-                },
+                }
             }
         }
+        self.data = board;
     }
 }
 
