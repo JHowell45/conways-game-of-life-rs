@@ -19,6 +19,15 @@ impl fmt::Display for CellState {
     }
 }
 
+impl fmt::Debug for CellState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            Self::Alive => write!(f, "1"),
+            Self::Dead => write!(f, "0"),
+        }
+    }
+}
+
 impl Distribution<CellState> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> CellState {
         match rng.gen_range(0..=1) {
