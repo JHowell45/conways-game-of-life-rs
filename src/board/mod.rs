@@ -141,20 +141,33 @@ impl Board {
                 neighbours += self.data[index + self.x_size + 1] as usize;
             }
         }
-        println!(
-            "x: {}, y: {} || value: {} || index: {} || neighbours: {}",
-            index % self.x_size,
-            row,
-            self.data[index],
-            index,
-            neighbours
-        );
+        // println!(
+        //     "x: {}, y: {} || value: {} || index: {} || neighbours: {}",
+        //     index % self.x_size,
+        //     row,
+        //     self.data[index],
+        //     index,
+        //     neighbours
+        // );
         neighbours
     }
 
     pub fn step(&mut self) {
         for (index, val) in self.data.iter_mut().enumerate() {
-            println!("({}, {})", index, val);
+            let neighbours = self.get_neighbours(index);
+            println!("Index: {} || Value: {} || Neighbours: {}", index, val, neighbours);
+            match val {
+                CellState::Alive => {
+                    if neighbours != 2 && neighbours != 3 {
+                        *val = CellState::Dead
+                    }
+                },
+                CellState::Dead => {
+                    if neighbours == 3 {
+                        *val = CellState::Alive
+                    }
+                },
+            }
         }
     }
 }
