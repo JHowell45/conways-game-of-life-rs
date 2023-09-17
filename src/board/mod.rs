@@ -92,61 +92,42 @@ impl Board {
         self.x_size * self.y_size
     }
 
-    pub fn handle_flip(&mut self, index: usize, value: CellState, neighbours: usize) {
-        match value {
-            CellState::Alive => {
-                if neighbours != 2 && neighbours != 3 {
-                    self.data[index] = CellState::Dead
-                }
-            }
-            CellState::Dead => {
-                if neighbours == 3 {
-                    self.data[index] = CellState::Alive
-                }
-            }
-        }
+    pub fn get_index_state(&self, index: usize) -> CellState {
+        self.data[index]
     }
 
     pub fn get_neighbours(&self, index: usize) -> usize {
-        let row = index / self.x_size;
         let mut neighbours: usize = 0;
 
         if index == 0 {
-            println!("(1) TRUE START || Index: {}", index);
             neighbours += self.data[index + 1] as usize;
             neighbours += self.data[index + self.x_size] as usize;
             neighbours += self.data[index + self.x_size + 1] as usize;
         } else if index == self.x_size - 1 {
-            println!("(2) END OF THE START ROW || Index: {}", index);
             neighbours += self.data[index - 1] as usize;
             neighbours += self.data[index + self.x_size] as usize;
             neighbours += self.data[index + self.x_size - 1] as usize;
         } else if index == self.size() - 1 {
-            println!("(3) TRUE END || Index: {}", index);
             neighbours += self.data[index - 1] as usize;
             neighbours += self.data[index - self.x_size] as usize;
             neighbours += self.data[index - self.x_size - 1] as usize;
         } else if index == (self.size() - self.x_size) {
-            println!("(5) LAST ROW START || Index: {}", index);
             neighbours += self.data[index + 1] as usize;
             neighbours += self.data[index - self.x_size] as usize;
             neighbours += self.data[index - self.x_size + 1] as usize;
         } else if (index != 0 || index != self.size() - 1) && (index % self.x_size == 0) {
-            println!("(5) START OF ALL OTHER ROWS || Index: {}", index);
             neighbours += self.data[index + 1] as usize;
             neighbours += self.data[index + self.x_size] as usize;
             neighbours += self.data[index + self.x_size + 1] as usize;
             neighbours += self.data[index - self.x_size] as usize;
             neighbours += self.data[index - self.x_size + 1] as usize;
         } else if index != 1 && ((index + 1) % self.x_size == 0) {
-            println!("(6) END OF ALL OTHER ROWS || Index: {}", index);
             neighbours += self.data[index + 1] as usize;
             neighbours += self.data[index - self.x_size] as usize;
             neighbours += self.data[index - self.x_size - 1] as usize;
             neighbours += self.data[index + self.x_size] as usize;
             neighbours += self.data[index + self.x_size - 1] as usize;
         } else {
-            println!("OTHER || Index: {}", index);
             neighbours += self.data[index + 1] as usize;
             neighbours += self.data[index - 1] as usize;
             if index > self.x_size {
