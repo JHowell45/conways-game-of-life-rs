@@ -1,24 +1,24 @@
 pub mod board;
+use bevy::prelude::*;
+use board::{cell::CellState, Board};
 
-use std::process::Command;
-use board::Board;
 
 fn main() {
-    // let mut board = Board::randomise(4, 3);
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_systems(Startup, create_board)
+        .add_systems(Update, update_board)
+        .run();
+}
+
+fn create_board(mut commands: Commands) {
     let s: usize = 20;
-    let mut board = Board::randomise(s, s);
-    println!("{}", board);
-    loop {
-        if let Err(_) = Command::new("clear").status() {
-            let _ = Command::new("cls").status();
-        }
-        
-        board.step();
-        println!("\n\nConway's Game of Life\n\n");
-        println!("X Size: {}", board.x_size);
-        println!("Y Size: {}", board.y_size);
-        println!();
+    commands.spawn(Board::randomise(s, s));
+}
+
+fn update_board(query: Query<&mut Board>) {
+    for board in &query {
+        // board.step();
         println!("{}", board);
-        std::thread::sleep(std::time::Duration::from_millis(200));
     }
 }
