@@ -4,13 +4,12 @@ use board::Board;
 
 fn main() {
     // let mut board = Board::randomise(4, 3);
-    let mut board = Board::from_u8_vec(vec![0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0], Some(3));
+    let s: usize = 20;
+    let mut board = Board::randomise(s, s);
     println!("{}", board);
-    println!("x_size: {}", board.x_size);
-    println!("y_size: {}", board.y_size);
-    for index in 0..board.size() {
-        board.get_neighbours(index);
+    loop {
+        board.step();
+        println!("{}", board);
+        std::thread::sleep(std::time::Duration::from_millis(500));
     }
-    board.step();
-    println!("{}", board);
 }
