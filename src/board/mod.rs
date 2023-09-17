@@ -131,7 +131,7 @@ impl Board {
             neighbours += self.data[index + 1] as usize;
             neighbours += self.data[index - self.x_size] as usize;
             neighbours += self.data[index - self.x_size + 1] as usize;
-        } else if (index != 0 || index != self.size()-1) && (index % self.x_size == 0) {
+        } else if (index != 0 || index != self.size() - 1) && (index % self.x_size == 0) {
             println!("(5) START OF ALL OTHER ROWS || Index: {}", index);
             neighbours += self.data[index + 1] as usize;
             neighbours += self.data[index + self.x_size] as usize;
