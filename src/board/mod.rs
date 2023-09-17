@@ -274,7 +274,7 @@ mod tests {
         CellState::Dead,
         CellState::Dead,
         CellState::Dead,
-    ], None, 3, 3, 0, 3 ; "3x3 grid with 3 neighbours")]
+    ], None, 3, 3, 0, 3 ; "3x3 grid with 3 neighbours for index 0")]
     #[test_case(vec![
         CellState::Dead,
         CellState::Alive,
@@ -285,7 +285,40 @@ mod tests {
         CellState::Dead,
         CellState::Dead,
         CellState::Dead,
-    ], None, 3, 3, 0, 2 ; "3x3 grid with 2 neighbours")]
+    ], None, 3, 3, 0, 2 ; "3x3 grid with 2 neighbours for index 0")]
+    #[test_case(vec![
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Dead,
+        CellState::Dead,
+        CellState::Dead,
+        CellState::Dead,
+        CellState::Dead,
+    ], None, 3, 3, 1, 3 ; "3x3 grid with 2 neighbours for index 1")]
+    #[test_case(vec![
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Dead,
+        CellState::Alive,
+        CellState::Dead,
+    ], None, 3, 3, 8, 3 ; "3x3 grid with 2 neighbours for index 8")]
+    #[test_case(vec![
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Alive,
+        CellState::Dead,
+        CellState::Alive,
+        CellState::Dead,
+    ], None, 3, 3, 4, 4 ; "3x3 grid with 2 neighbours for index 4")]
     fn test_get_neighbours(
         data: Vec<CellState>,
         rows: Option<usize>,
