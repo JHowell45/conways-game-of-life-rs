@@ -125,51 +125,51 @@ impl Board {
         let row = index / self.x_size;
         let mut neighbours: usize = 0;
 
-        println!("Index: {}", index);
-        println!("Row: {}", row);
-
         if index == 0 {
-            if self.data[index + 1] == CellState::Alive {
-                neighbours += 1;
-            }
-            if self.data[index + self.x_size] == CellState::Alive {
-                neighbours += 1;
-            }
-            if self.data[index + self.x_size + 1] == CellState::Alive {
-                neighbours += 1;
-            }
+            println!("(1) TRUE START || Index: {}", index);
+            neighbours += self.data[index + 1] as usize;
+            neighbours += self.data[index + self.x_size] as usize;
+            neighbours += self.data[index + self.x_size + 1] as usize;
+        } else if index == self.x_size - 1 {
+            println!("(2) END OF THE START ROW || Index: {}", index);
+            neighbours += self.data[index - 1] as usize;
+            neighbours += self.data[index + self.x_size] as usize;
+            neighbours += self.data[index + self.x_size - 1] as usize;
         } else if index == self.size() - 1 {
-            if self.data[index - 1] == CellState::Alive {
-                neighbours += 1;
-            }
-            if self.data[index - self.x_size] == CellState::Alive {
-                neighbours += 1;
-            }
-            if self.data[index - self.x_size - 1] == CellState::Alive {
-                neighbours += 1;
-            }
-        } else if index + 1 % self.x_size == 0 {
-            if self.data[index - 1] == CellState::Alive {
-                neighbours += 1;
-            }
-            if row >= 1 {
-                if self.data[index - self.x_size] == CellState::Alive {
-                    neighbours += 1;
-                }
-                if self.data[index - self.x_size - 1] == CellState::Alive {
-                    neighbours += 1;
-                }
-            }
-            if row < self.y_size {
-                if self.data[index + self.x_size] == CellState::Alive {
-                    neighbours += 1;
-                }
-                if self.data[index + self.x_size - 1] == CellState::Alive {
-                    neighbours += 1;
-                }
-            }
+            println!("(3) TRUE END || Index: {}", index);
+            neighbours += self.data[index - 1] as usize;
+            neighbours += self.data[index - self.x_size] as usize;
+            neighbours += self.data[index - self.x_size - 1] as usize;
+        } else if index == (self.size() - self.x_size) {
+            println!("(5) LAST ROW START || Index: {}", index);
+            neighbours += self.data[index + 1] as usize;
+            neighbours += self.data[index - self.x_size] as usize;
+            neighbours += self.data[index - self.x_size + 1] as usize;
+        } else if (index != 0 || index != self.size()-1) && (index % self.x_size == 0) {
+            println!("(5) START OF ALL OTHER ROWS || Index: {}", index);
+            neighbours += self.data[index + 1] as usize;
+            neighbours += self.data[index + self.x_size] as usize;
+            neighbours += self.data[index + self.x_size + 1] as usize;
+            neighbours += self.data[index - self.x_size] as usize;
+            neighbours += self.data[index - self.x_size + 1] as usize;
+        } else if index != 1 && ((index + 1) % self.x_size == 0) {
+            println!("(6) END OF ALL OTHER ROWS || Index: {}", index);
+            neighbours += self.data[index + 1] as usize;
+            neighbours += self.data[index - self.x_size] as usize;
+            neighbours += self.data[index - self.x_size - 1] as usize;
+            neighbours += self.data[index + self.x_size] as usize;
+            neighbours += self.data[index + self.x_size - 1] as usize;
         } else {
+            println!("OTHER || Index: {}", index);
         }
+        println!(
+            "x: {}, y: {} || value: {} || index: {} || neighbours: {}",
+            index % self.x_size,
+            row,
+            self.data[index],
+            index,
+            neighbours
+        );
         neighbours
     }
 
