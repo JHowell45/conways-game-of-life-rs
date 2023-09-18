@@ -1,5 +1,5 @@
 pub mod board;
-use bevy::{prelude::*, sprite::{MaterialMesh2dBundle, Material2d}};
+use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
 use board::{cell::CellState, Board};
 
 fn main() {
