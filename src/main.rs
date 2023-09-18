@@ -1,10 +1,20 @@
 pub mod board;
 use bevy::{prelude::*, sprite::{MaterialMesh2dBundle, Mesh2dHandle}};
+use bevy::window::WindowMode;
 use board::{cell::CellState, Board};
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, GameStatePlugin))
+        .add_plugins((DefaultPlugins.set(
+            WindowPlugin {
+                primary_window: Some(Window {
+                    mode: WindowMode::Windowed,
+                    title: "Conway's Game of Life".to_string(),
+                    ..default()
+                  }),
+                  ..default()
+            }
+        ), GameStatePlugin))
         .run();
 }
 
@@ -16,6 +26,7 @@ impl Plugin for GameStatePlugin {
             0.5,
             TimerMode::Repeating,
         )))
+        .add_systems(Startup, maximize_window)
         .add_systems(Startup, create_board)
         .add_systems(Update, draw);
     }
@@ -91,4 +102,9 @@ fn draw(
             x += x_step;
         }
     }
+}
+
+fn maximize_window(mut windows: Query<&mut Window>) {
+    let mut window = windows.single_mut();
+    window.set_maximized(true);
 }
