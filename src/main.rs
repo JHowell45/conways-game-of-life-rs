@@ -1,5 +1,5 @@
 pub mod board;
-use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
+use bevy::{prelude::*, sprite::{MaterialMesh2dBundle, Mesh2dHandle}};
 use board::{cell::CellState, Board};
 
 fn main() {
@@ -13,7 +13,7 @@ pub struct GameStatePlugin;
 impl Plugin for GameStatePlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(GameIntervalTimer(Timer::from_seconds(
-            1.0,
+            0.5,
             TimerMode::Repeating,
         )))
         .add_systems(Startup, create_board)
@@ -37,6 +37,7 @@ fn draw(
     time: Res<Time>,
     mut timer: ResMut<GameIntervalTimer>,
     mut board: Query<&mut Board>,
+    cells: Query<Entity, With<Mesh2dHandle>>,
 ) {
     if timer.0.tick(time.delta()).just_finished() {
         let mut board = board.single_mut();
@@ -67,6 +68,10 @@ fn draw(
 
         meshes.clear();
         materials.clear();
+
+        for cell in cells.iter() {
+            commands.entity(cell).despawn();
+        }
 
         for (index, value) in board.data.iter().enumerate() {
             if index % board.x_size == 0 {
