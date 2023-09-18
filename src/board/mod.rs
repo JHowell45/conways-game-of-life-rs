@@ -1,11 +1,11 @@
 pub mod cell;
-use std::fmt;
 use bevy::ecs::component::Component;
 use cell::CellState;
+use std::fmt;
 
 #[derive(Component, Clone, Debug, PartialEq)]
 pub struct Board {
-    data: Vec<CellState>,
+    pub data: Vec<CellState>,
     pub x_size: usize,
     pub y_size: usize,
 }
