@@ -23,7 +23,7 @@ pub struct GameStatePlugin;
 impl Plugin for GameStatePlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(GameIntervalTimer(Timer::from_seconds(
-            0.5,
+            0.2,
             TimerMode::Repeating,
         )))
         .add_systems(Startup, maximize_window)
@@ -67,15 +67,15 @@ fn draw(
         let x_step = radius_buffer;
         let y_step = radius_buffer;
 
-        println!("x_size: {}", x_size);
-        println!("y_size: {}", y_size);
-        println!("x_start: {}", x_start);
-        println!("y_start: {}", y_start);
-        println!("x: {}", x);
-        println!("y: {}", y);
-        println!("radius: {}", radius);
-        println!("x_step: {}", x_step);
-        println!("y_step: {}", y_step);
+        // println!("x_size: {}", x_size);
+        // println!("y_size: {}", y_size);
+        // println!("x_start: {}", x_start);
+        // println!("y_start: {}", y_start);
+        // println!("x: {}", x);
+        // println!("y: {}", y);
+        // println!("radius: {}", radius);
+        // println!("x_step: {}", x_step);
+        // println!("y_step: {}", y_step);
 
         meshes.clear();
         materials.clear();
