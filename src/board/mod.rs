@@ -1,11 +1,11 @@
-mod cell;
+pub mod cell;
+use bevy::ecs::component::Component;
+use cell::CellState;
 use std::fmt;
 
-use cell::CellState;
-
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Component, Clone, Debug, PartialEq)]
 pub struct Board {
-    data: Vec<CellState>,
+    pub data: Vec<CellState>,
     pub x_size: usize,
     pub y_size: usize,
 }
@@ -149,18 +149,14 @@ impl Board {
         for (index, value) in self.data.iter().enumerate() {
             let neighbours = self.get_neighbours(index);
             board[index] = match value {
-                CellState::Alive => {
-                    match neighbours {
-                        2 | 3 => CellState::Alive,
-                        _ => CellState::Dead,
-                    }
-                }
-                CellState::Dead => {
-                    match neighbours {
-                        3 => CellState::Alive,
-                        _ => CellState::Dead,
-                    }
-                }
+                CellState::Alive => match neighbours {
+                    2 | 3 => CellState::Alive,
+                    _ => CellState::Dead,
+                },
+                CellState::Dead => match neighbours {
+                    3 => CellState::Alive,
+                    _ => CellState::Dead,
+                },
             }
         }
         self.data = board;
