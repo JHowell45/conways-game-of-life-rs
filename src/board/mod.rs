@@ -246,29 +246,27 @@ mod tests {
         assert_eq!(neighbours, board.get_neighbours(index));
     }
 
-    #[test]
-    fn test_step() {
-        let mut board = Board::from_u8_vec(
-            vec![
-                0,0,0,0,
-                1,0,0,0,
-                1,1,0,0,
-                0,0,0,0,
-            ],
-            Some(4)
-        );
-        let expected_step = Board::from_u8_vec(
-            vec![
-                0,0,0,0,
-                1,1,0,0,
-                1,1,0,0,
-                0,0,0,1,
-            ],
-            Some(4)
-        );
+    #[test_case(
+        vec![
+            0,0,0,0,
+            1,0,0,0,
+            1,1,0,0,
+            0,0,0,0,
+        ],
+        vec![
+            0,0,0,0,
+            1,1,0,0,
+            1,1,0,0,
+            0,0,0,0,
+        ],
+        Some(4)
+    )]
+    fn test_step(original: Vec<u8>, expected: Vec<u8>, rows: Option<usize>) {
+        let mut board = Board::from_u8_vec(original, rows);
+        let expected_board = Board::from_u8_vec(expected, rows);
         println!("{}", board);
         board.step();
         println!("{}", board);
-        assert_eq!(expected_step, board);
+        assert_eq!(expected_board, board);
     }
 }
