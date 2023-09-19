@@ -3,7 +3,7 @@ use bevy::ecs::component::Component;
 use cell::CellState;
 use std::fmt;
 
-#[derive(Component, Clone, Debug, PartialEq)]
+#[derive(Component, Clone, Debug, PartialEq, Eq)]
 pub struct Board {
     pub data: Vec<CellState>,
     pub x_size: usize,
@@ -200,11 +200,37 @@ mod tests {
         Board::from_u8_vec(vec![0, 0, 1, 0, 0], Some(2));
     }
 
-    #[test_case(vec![0,1,0,1,1,0,0,0,0], None, 3, 3, 0, 3 ; "3x3 grid with 3 neighbours for index 0")]
-    #[test_case(vec![0,1,0,1,0,0,0,0,0], None, 3, 3, 0, 2 ; "3x3 grid with 2 neighbours for index 0")]
-    #[test_case(vec![1,1,1,1,0,0,0,0,0], None, 3, 3, 1, 3 ; "3x3 grid with 3 neighbours for index 1")]
-    #[test_case(vec![1,1,1,1,1,1,0,1,0], None, 3, 3, 8, 3 ; "3x3 grid with 3 neighbours for index 8")]
-    #[test_case(vec![1,1,1,1,1,1,0,1,0], None, 3, 3, 4, 6 ; "3x3 grid with 6 neighbours for index 4")]
+    #[test_case(vec![
+        0,1,0,
+        1,1,0,
+        0,0,0
+        ], Some(3), 3, 3, 0, 3 ; "3x3 grid with 3 neighbours for index 0")]
+    #[test_case(vec![
+        0,1,0,
+        1,0,0,
+        0,0,0
+        ], Some(3), 3, 3, 0, 2 ; "3x3 grid with 2 neighbours for index 0")]
+    #[test_case(vec![
+        1,1,1,
+        1,0,0,
+        0,0,0
+        ], Some(3), 3, 3, 1, 3 ; "3x3 grid with 3 neighbours for index 1")]
+    #[test_case(vec![
+        1,1,1,
+        1,1,1,
+        0,1,0
+        ], Some(3), 3, 3, 8, 3 ; "3x3 grid with 3 neighbours for index 8")]
+    #[test_case(vec![
+        1,1,1,
+        1,1,1,
+        0,1,0
+        ], Some(3), 3, 3, 4, 6 ; "3x3 grid with 6 neighbours for index 4")]
+    #[test_case(vec![
+        0,0,0,0,
+        1,0,0,0,
+        1,1,0,0,
+        0,0,0,0,
+        ], Some(4), 4, 4, 5, 3 ; "4x4 grid with 3 neighbours for index 5")]
     fn test_get_neighbours(
         data: Vec<u8>,
         rows: Option<usize>,
@@ -218,5 +244,31 @@ mod tests {
         assert_eq!(x_size, board.x_size);
         assert_eq!(y_size, board.y_size);
         assert_eq!(neighbours, board.get_neighbours(index));
+    }
+
+    #[test]
+    fn test_step() {
+        let mut board = Board::from_u8_vec(
+            vec![
+                0,0,0,0,
+                1,0,0,0,
+                1,1,0,0,
+                0,0,0,0,
+            ],
+            Some(4)
+        );
+        let expected_step = Board::from_u8_vec(
+            vec![
+                0,0,0,0,
+                1,1,0,0,
+                1,1,0,0,
+                0,0,0,1,
+            ],
+            Some(4)
+        );
+        println!("{}", board);
+        board.step();
+        println!("{}", board);
+        assert_eq!(expected_step, board);
     }
 }
